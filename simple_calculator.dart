@@ -1,113 +1,89 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(CalculatorApp());
+void main() {
+  runApp(CalculatorApp());
+}
 
 class CalculatorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: Calculator(),
     );
   }
 }
 
-class Calculator extends StatelessWidget {
+class Calculator extends StatefulWidget {
+  @override
+  _CalculatorState createState() => _CalculatorState();
+}
+
+class _CalculatorState extends State<Calculator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text('Simple Calculator'),
+      ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(12),
-              alignment: Alignment.bottomRight,
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.symmetric(vertical: 24, horizontal: 12),
               child: Text(
                 '0',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 48),
               ),
             ),
           ),
-          _buildButtonRow(['7', '8', '9', '/']),
-          _buildButtonRow(['4', '5', '6', '*']),
-          _buildButtonRow(['1', '2', '3', '-']),
-          _buildButtonRow(['0', '.', '=', '+']),
+          Row(
+            children: <Widget>[
+              buildButton('7'),
+              buildButton('8'),
+              buildButton('9'),
+              buildButton('/'),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              buildButton('4'),
+              buildButton('5'),
+              buildButton('6'),
+              buildButton('*'),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              buildButton('1'),
+              buildButton('2'),
+              buildButton('3'),
+              buildButton('-'),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              buildButton('0'),
+              buildButton('.'),
+              buildButton('='),
+              buildButton('+'),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildButtonRow(List<String> buttons) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: buttons.map((btnText) {
-        return CalculatorButton(
-          text: btnText,
-        );
-      }).toList(),
-    );
-  }
-}
-
-class CalculatorButton extends StatelessWidget {
-  final String text;
-
-  CalculatorButton({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(8),
-      child: SizedBox(
-        width: 80,
-        height: 80,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(40),
-            ),
-            padding: EdgeInsets.all(20),
-            backgroundColor: _buttonColor(text),
-            textStyle: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          onPressed: () {},
-          child: Text(
-            text,
-            style: TextStyle(
-              color: _textColor(text),
-            ),
-          ),
+  Widget buildButton(String text) {
+    return Expanded(
+      child: OutlineButton(
+        padding: EdgeInsets.all(24),
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 20),
         ),
+        onPressed: () {},
       ),
     );
-  }
-
-  Color _buttonColor(String text) {
-    if (text == '0') {
-      return Colors.grey[700]!;
-    } else if (text == '=') {
-      return Colors.orange[700]!;
-    } else if (['/', '*', '-', '+'].contains(text)) {
-      return Colors.orange[400]!;
-    } else {
-      return Colors.grey[800]!;
-    }
-  }
-
-  Color _textColor(String text) {
-    if (['/', '*', '-', '+', '='].contains(text)) {
-      return Colors.white;
-    } else {
-      return Colors.white70;
-    }
   }
 }
